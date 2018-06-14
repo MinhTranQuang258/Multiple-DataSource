@@ -10,24 +10,26 @@
  * Swiss Post Solution.
  * Floor 4-5-8, ICT Tower, Quang Trung Software City
  */
-package com.sps.vn.datasource.core;
+package com.sps.vn.datasource;
 
-import java.util.Map;
+import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.apache.tomcat.jdbc.pool.DataSourceProxy;
+import org.apache.tomcat.jdbc.pool.jmx.ConnectionPool;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-public abstract class AbstractDataSource {
+abstract class AbstractDataSourceConfiguration {
     
     protected abstract DataSource dataSource();
     
-    public EntityManagerFactory getEntityManagerFactoryBean(DataSource dataSource) {
+    protected EntityManagerFactory getEntityManagerFactoryBean(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean containerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         
         JpaVendorAdapter jpaVendorAdapter= new HibernateJpaVendorAdapter();
@@ -35,7 +37,7 @@ public abstract class AbstractDataSource {
         containerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
         containerEntityManagerFactoryBean.setPackagesToScan(this.getPackagesToScan());
         containerEntityManagerFactoryBean.setDataSource(dataSource);
-        containerEntityManagerFactoryBean.setJpaPropertyMap(this.getProperties());
+        containerEntityManagerFactoryBean.setJpaProperties(this.getProperties());
         containerEntityManagerFactoryBean.setPersistenceUnitName(this.getUnitName());
         containerEntityManagerFactoryBean.afterPropertiesSet();
         
@@ -48,13 +50,22 @@ public abstract class AbstractDataSource {
         return transactionManager;
     }
     
-    public abstract PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory);
+    protected ConnectionPool getJmxDatasource(DataSource dataSource) {
+    	if(dataSource instanceof DataSourceProxy) {
+    		return ((DataSourceProxy) dataSource).getPool().getJmxPool();
+    	}
+    	return null;
+    }
     
-    public abstract EntityManagerFactory entityManagerFactory(DataSource dataSource);
+    protected abstract PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory);
+    
+    protected abstract EntityManagerFactory entityManagerFactory(DataSource dataSource);
+    
+    protected abstract ConnectionPool jmxDataSource(DataSource dataSource);
     
     protected abstract String getPackagesToScan();
     
-    protected abstract Map<String, String> getProperties();
+    protected abstract Properties getProperties();
     
     protected abstract String getUnitName();
 }

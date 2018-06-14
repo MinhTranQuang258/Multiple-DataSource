@@ -1,15 +1,3 @@
-/*
- * Class: FirstDataSource
- *
- * Created on Feb 26, 2018
- *
- * (c) Copyright Swiss Post Solution, unpublished work
- * All use, disclosure, and/or reproduction of this material is prohibited
- * unless authorized in writing.  All Rights Reserved.
- * Rights in this program belong to:
- * Swiss Post Solution.
- * Floor 4-5-8, ICT Tower, Quang Trung Software City
- */
 package com.sps.vn.datasource;
 
 import java.util.Properties;
@@ -24,7 +12,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -33,47 +20,42 @@ import com.sps.vn.common.PropertiyConfiguration.FirstProperties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages="com.sps.vn.repository.first",
-entityManagerFactoryRef="fEntityManager",
-transactionManagerRef="fTransactionManager")
-class FirstDataSource extends AbstractDataSourceConfiguration{
+@EnableJpaRepositories(basePackages="com.sps.vn.repository.second",
+entityManagerFactoryRef="sEntityManager",
+transactionManagerRef="sTransactionManager")
+class SecondDataSource extends AbstractDataSourceConfiguration{
 	
 	@Autowired
 	private FirstProperties firstProperties;
-    
-	@Primary
-    @Override
-    @Bean(name="fDataSource")
-    @ConfigurationProperties(prefix= "app.custom.datasource.first")
+
+	@Override
+    @Bean(name="sDataSource")
+    @ConfigurationProperties(prefix= "app.custom.datasource.second")
     protected DataSource dataSource() {
 		DataSource dataSource= DataSourceBuilder.create().build();
         return dataSource;
     }    
 
-	@Primary
     @Override
-    @Bean("fTransactionManager")
-    protected PlatformTransactionManager transactionManager(EntityManagerFactory fEntityManager) {
-        return this.getTransactionManager(fEntityManager);
+    @Bean("sTransactionManager")
+    protected PlatformTransactionManager transactionManager(EntityManagerFactory sEntityManager) {
+        return this.getTransactionManager(sEntityManager);
     }
 
-	
-	@Primary
     @Override
-    @Bean("fEntityManager")
-    protected EntityManagerFactory entityManagerFactory(@Qualifier("fDataSource")DataSource fDataSource) {
-        return this.getEntityManagerFactoryBean(fDataSource);
+    @Bean("sEntityManager")
+    protected EntityManagerFactory entityManagerFactory(@Qualifier("sDataSource")DataSource sDataSource) {
+        return this.getEntityManagerFactoryBean(sDataSource);
     }
 
     @Override
 	protected ConnectionPool jmxDataSource(DataSource dataSource) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
     protected String getPackagesToScan() {
-        return "com.sps.vn.entities.first";
+        return "com.sps.vn.entities.second";
     }
 
     @Override
@@ -87,6 +69,7 @@ class FirstDataSource extends AbstractDataSourceConfiguration{
 
     @Override
     protected String getUnitName() {
-        return "firstUnit";
+        return "secondUnit";
     }
+
 }
