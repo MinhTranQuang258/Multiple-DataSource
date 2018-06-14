@@ -14,7 +14,7 @@ public class GeneralConfiguration {
 		
 		public static final String TRANSACTION_MANAGER= "fTransactionManager";
 		
-		public static final String REPOSITORY_PACKAGE= "com.sps.vn.repository.first";
+		public static final String REPOSITORY_PACKAGE= "com.sps.vn.repository";
 		
 		public static final String JMX_CONNECTION_POOL= "";
 		
@@ -33,7 +33,7 @@ public class GeneralConfiguration {
 		
 		public static final String TRANSACTION_MANAGER= "sTransactionManager";
 		
-		public static final String REPOSITORY_PACKAGE= "com.sps.vn.repository.second";
+		public static final String REPOSITORY_PACKAGE= "com.sps.vn.repository";
 		
 		public static final String JMX_CONNECTION_POOL= "";
 		

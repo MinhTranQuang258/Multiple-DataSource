@@ -15,10 +15,14 @@ public class TestController {
 	
 	@RequestMapping(value= "/test")
 	public void test() {
-		System.out.println("Test");
-		Company company= new Company();
-		company.setName("SPS");
-		companyRepository.save(company);
+		try {
+			System.out.println("Test");
+			Company company= new Company();
+			company.setName("SPS");
+			companyRepository.save(company);
+		}catch (Exception e) {
+			throw e;
+		}
 	}
 	
 }
