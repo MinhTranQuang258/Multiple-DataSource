@@ -20,31 +20,31 @@ import com.sps.vn.common.PropertiyConfiguration.FirstProperties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages="com.sps.vn.repository.second",
-entityManagerFactoryRef="sEntityManager",
-transactionManagerRef="sTransactionManager")
+@EnableJpaRepositories(basePackages= GeneralConfiguration.Second.REPOSITORY_PACKAGE,
+entityManagerFactoryRef= GeneralConfiguration.Second.ENTITY_MANAGER,
+transactionManagerRef= GeneralConfiguration.Second.TRANSACTION_MANAGER)
 class SecondDataSource extends AbstractDataSourceConfiguration{
 	
 	@Autowired
 	private FirstProperties firstProperties;
 
 	@Override
-    @Bean(name="sDataSource")
-    @ConfigurationProperties(prefix= "app.custom.datasource.second")
+    @Bean(name= GeneralConfiguration.Second.DATASOURCE)
+    @ConfigurationProperties(prefix= GeneralConfiguration.Second.PREFIX_DATASOURCE)
     protected DataSource dataSource() {
 		DataSource dataSource= DataSourceBuilder.create().build();
         return dataSource;
     }    
 
     @Override
-    @Bean("sTransactionManager")
+    @Bean(name= GeneralConfiguration.Second.TRANSACTION_MANAGER)
     protected PlatformTransactionManager transactionManager(EntityManagerFactory sEntityManager) {
         return this.getTransactionManager(sEntityManager);
     }
 
     @Override
-    @Bean("sEntityManager")
-    protected EntityManagerFactory entityManagerFactory(@Qualifier("sDataSource")DataSource sDataSource) {
+    @Bean(name= GeneralConfiguration.Second.ENTITY_MANAGER)
+    protected EntityManagerFactory entityManagerFactory(@Qualifier(GeneralConfiguration.Second.DATASOURCE)DataSource sDataSource) {
         return this.getEntityManagerFactoryBean(sDataSource);
     }
 
@@ -55,7 +55,7 @@ class SecondDataSource extends AbstractDataSourceConfiguration{
 
 	@Override
     protected String getPackagesToScan() {
-        return "com.sps.vn.entities.second";
+        return GeneralConfiguration.Second.ENTITY_PACKAGE;
     }
 
     @Override
@@ -69,7 +69,7 @@ class SecondDataSource extends AbstractDataSourceConfiguration{
 
     @Override
     protected String getUnitName() {
-        return "secondUnit";
+        return GeneralConfiguration.Second.UNIT_NAME;
     }
 
 }

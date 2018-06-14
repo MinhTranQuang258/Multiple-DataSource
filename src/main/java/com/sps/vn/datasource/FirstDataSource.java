@@ -33,9 +33,9 @@ import com.sps.vn.common.PropertiyConfiguration.FirstProperties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages="com.sps.vn.repository.first",
-entityManagerFactoryRef="fEntityManager",
-transactionManagerRef="fTransactionManager")
+@EnableJpaRepositories(basePackages=GeneralConfiguration.First.REPOSITORY_PACKAGE,
+entityManagerFactoryRef= GeneralConfiguration.First.ENTITY_MANAGER,
+transactionManagerRef=GeneralConfiguration.First.TRANSACTION_MANAGER)
 class FirstDataSource extends AbstractDataSourceConfiguration{
 	
 	@Autowired
@@ -43,8 +43,8 @@ class FirstDataSource extends AbstractDataSourceConfiguration{
     
 	@Primary
     @Override
-    @Bean(name="fDataSource")
-    @ConfigurationProperties(prefix= "app.custom.datasource.first")
+    @Bean(name=GeneralConfiguration.First.DATASOURCE)
+    @ConfigurationProperties(prefix= GeneralConfiguration.First.PREFIX_DATASOURCE)
     protected DataSource dataSource() {
 		DataSource dataSource= DataSourceBuilder.create().build();
         return dataSource;
@@ -52,7 +52,7 @@ class FirstDataSource extends AbstractDataSourceConfiguration{
 
 	@Primary
     @Override
-    @Bean("fTransactionManager")
+    @Bean(name= GeneralConfiguration.First.TRANSACTION_MANAGER)
     protected PlatformTransactionManager transactionManager(EntityManagerFactory fEntityManager) {
         return this.getTransactionManager(fEntityManager);
     }
@@ -60,8 +60,8 @@ class FirstDataSource extends AbstractDataSourceConfiguration{
 	
 	@Primary
     @Override
-    @Bean("fEntityManager")
-    protected EntityManagerFactory entityManagerFactory(@Qualifier("fDataSource")DataSource fDataSource) {
+    @Bean(name= GeneralConfiguration.First.ENTITY_MANAGER)
+    protected EntityManagerFactory entityManagerFactory(@Qualifier(GeneralConfiguration.First.DATASOURCE)DataSource fDataSource) {
         return this.getEntityManagerFactoryBean(fDataSource);
     }
 
@@ -73,7 +73,7 @@ class FirstDataSource extends AbstractDataSourceConfiguration{
 
 	@Override
     protected String getPackagesToScan() {
-        return "com.sps.vn.entities.first";
+        return GeneralConfiguration.First.ENTITY_PACKAGE;
     }
 
     @Override
@@ -87,6 +87,6 @@ class FirstDataSource extends AbstractDataSourceConfiguration{
 
     @Override
     protected String getUnitName() {
-        return "firstUnit";
+        return GeneralConfiguration.First.UNIT_NAME;
     }
 }
