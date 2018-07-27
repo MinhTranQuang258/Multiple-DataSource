@@ -14,15 +14,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.sps.vn.common.PropertiyConfiguration.FirstProperties;
 
 @Configuration
-@EnableTransactionManagement
 @EnableJpaRepositories(basePackages= GeneralConfiguration.Second.REPOSITORY_PACKAGE,
 entityManagerFactoryRef= GeneralConfiguration.Second.ENTITY_MANAGER,
-transactionManagerRef= GeneralConfiguration.Second.TRANSACTION_MANAGER)
+transactionManagerRef= GeneralConfiguration.General.TRANSACTION_MANAGER)
 class SecondDataSource extends AbstractDataSourceConfiguration{
 	
 	@Autowired
@@ -37,9 +35,8 @@ class SecondDataSource extends AbstractDataSourceConfiguration{
     }    
 
     @Override
-    @Bean(name= GeneralConfiguration.Second.TRANSACTION_MANAGER)
     protected PlatformTransactionManager transactionManager(EntityManagerFactory sEntityManager) {
-        return this.getTransactionManager(sEntityManager);
+    	return null;
     }
 
     @Override

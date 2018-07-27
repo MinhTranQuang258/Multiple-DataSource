@@ -35,8 +35,8 @@ abstract class AbstractDataSourceConfiguration {
         JpaVendorAdapter jpaVendorAdapter= new HibernateJpaVendorAdapter();
         
         containerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-        containerEntityManagerFactoryBean.setPackagesToScan(this.getPackagesToScan());
         containerEntityManagerFactoryBean.setDataSource(dataSource);
+        containerEntityManagerFactoryBean.setPackagesToScan(this.getPackagesToScan());
         containerEntityManagerFactoryBean.setJpaProperties(this.getProperties());
         containerEntityManagerFactoryBean.setPersistenceUnitName(this.getUnitName());
         containerEntityManagerFactoryBean.afterPropertiesSet();

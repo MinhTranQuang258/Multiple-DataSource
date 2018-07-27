@@ -1,4 +1,4 @@
-package com.sps.vn.entities;
+package com.sps.vn.entities.second;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,8 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Company {
-
+public class Employee {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long id;
@@ -29,5 +28,4 @@ public class Company {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 }
